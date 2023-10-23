@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SignUp</title>
+</head>
+<body>
+    <h1>Signup</h1>
+    <form action="/signup" method="post">
+    
+        <label>First Name</label>
+        <input type="text" required name="FirstName"/>
+        <label>Last Name</label>
+        <input type="text" required name="LastName"/>
+        <label>Email</label>
+        <input type="text" required name="Email"/>
+        <label>Password</label>
+        <input type="text" required name="Password"/>
+        <label>
+        <input type="radio" name="AccountType" value="Patient"> Patient
+        </label>
+        <label>
+        <input type="radio" name="AccountType" value="Doctor"> Doctor
+        </label>
+        <label>
+        <input type="radio" name="AccountType" value="Admin"> Admin
+        </label>
+             
+        <label>Specialization</label>
+        <input type="text" name="Specialization"/>
+        <div class="g-recaptcha" data-sitekey="6LfO5b4oAAAAAEawMCIHlc4aPflGCW2yT_ttjXjf"></div>
+  <button type="submit">Submit</button>
+</form>
+
+<script src="https://www.google.com/recaptcha/api.js" async defer></script>
+    
+
+
+    </form>
+</body>
+</html>

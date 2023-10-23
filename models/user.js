@@ -25,8 +25,8 @@ const UserSchema=new mongoose.Schema({
     },
     Salt: {
         type:String,
-        required:true,
-        unique:true,
+        required:false,
+        unique:false,
     },
 
     AccountType: {
@@ -50,40 +50,12 @@ const UserSchema=new mongoose.Schema({
     }});
 
 
-//Schema for appointments
-const AppointmentSchema=new mongoose.Schema({
-    PatientID: {
-        type:Number,
-        required:true,
-        unique:true,
 
-    },
-    DoctorID: {
-        type:Number,
-        required:true,
-        unique:true,
-
-    },
-    AppointmentDate: {
-        type:Date,
-        required:true,
-        unique:false,
-
-    },
-    Status: {
-        type:String,
-        enum:['Scheduled','Completed'],
-        default:'Scheduled',
-        
-
-    },
-});
 
 
 
 
     const user=mongoose.model('Users',UserSchema);
-    const appointment=mongoose.model('Appointments',AppointmentSchema);
 
-    module.exports={user,appointment};
+    module.exports=user;
     
