@@ -5,20 +5,26 @@ const mongoose=require("mongoose");
 
 
 const AppointmentSchema=new mongoose.Schema({
-    PatientID: {
-        type:Number,
+
+    /*_id:{
+        type:String,
         required:true,
         unique:true,
+    },*/
+    PatientID: {
+        type:String,
+        required:true,
+        unique:false,
 
     },
     DoctorID: {
-        type:Number,
+        type:String,
         required:true,
-        unique:true,
+        unique:false,
 
     },
     AppointmentDate: {
-        type:Date,
+        type:String,
         required:true,
         unique:false,
 
@@ -27,6 +33,8 @@ const AppointmentSchema=new mongoose.Schema({
         type:String,
         enum:['Scheduled','Completed'],
         default:'Scheduled',
+
+        
         
 
     },

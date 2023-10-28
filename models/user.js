@@ -1,7 +1,13 @@
 const mongoose=require("mongoose");
 
+
 //Schema for users
 const UserSchema=new mongoose.Schema({
+    /*_id:{
+        type:String,
+        required:true,
+        unique:true,
+    },*/
     FirstName: {
         type:String,
         required:true,
@@ -19,14 +25,14 @@ const UserSchema=new mongoose.Schema({
         unique:true,
     },
     Password: {
-        type:Number,
+        type:String,
         required:true,
         unique:false,
     },
     Salt: {
         type:String,
-        required:false,
-        unique:false,
+        required:true,
+        unique:true,
     },
 
     AccountType: {
@@ -43,13 +49,11 @@ const UserSchema=new mongoose.Schema({
         required:false,
         unique:false,
     },
-    Appointments: {
-        type:[String],
-        required:true,
-        unique:false,
-    }});
+    
+    });
 
-
+    
+      
 
 
 
@@ -58,4 +62,7 @@ const UserSchema=new mongoose.Schema({
     const user=mongoose.model('Users',UserSchema);
 
     module.exports=user;
+
+
+
     
