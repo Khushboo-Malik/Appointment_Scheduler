@@ -1,3 +1,6 @@
+require("dotenv").config();
+
+
 
 const express = require("express");
 const { connectMongoDb } = require("./connection");
@@ -27,7 +30,13 @@ app.set("views", path.resolve("./views"));
 
 
 app.get("/signup", async (req, res) => {
-  return res.render("signup");h
+    
+  const variables=
+  {"sitekey":process.env.SITE_KEY,}
+  
+
+  
+  return res.render("signup",variables);
 });
 app.post("/signup",handleUserSignup);
 

@@ -1,7 +1,3 @@
 module.exports={
-    user:"mail.khushboomalik@gmail.com",
-    clientId:"",
-    clientSecret:"",
-    refreshToken:""
+    user:"mail.khushboomalik@gmail.com"}
 
-}
