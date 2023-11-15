@@ -21,18 +21,14 @@ const refreshToken = process.env.REFRESH_TOKEN;
 const OAuth2_client = new OAuth2(clientId, clientSecret);
 OAuth2_client.setCredentials({ refresh_token: refreshToken });
 
-
 //SignUp Function
 
 async function handleUserSignup(req, res) {
 
-
     const body = req.body;
     const Response = req.body["g-recaptcha-response"];
     const secretkey = process.env.SECRET_KEY;
-    console.log("secret key:", secretkey);
     const verify = `https://www.google.com/recaptcha/api/siteverify?secret=${secretkey}&response=${Response}`;
-    console.log("verify:", verify);
     try {
         const response = await axios.post(verify);
         console.log("success:", response.data);
@@ -46,7 +42,13 @@ async function handleUserSignup(req, res) {
         res.send("Error verifying reCAPTCHA");
         return;
     }
+    const allowedDomain = "akgec.ac.in";
+    const useremail = body.Email.toLowerCase();
 
+    if (!useremail.endsWith(allowedDomain)) {
+        res.send("Only users with akgec.ac.in email address can sign up");
+        return;
+    }
     const user = {
 
         FirstName: body.FirstName,
@@ -54,11 +56,16 @@ async function handleUserSignup(req, res) {
         Email: body.Email,
         Password: body.Password,
         AccountType: body.AccountType,
-        Specialization: body.Specialization,
-
+        Specialization: body.Specialization,        
     }
-
-
+    
+    if(body.Specialization && body.AccountType!=="Doctor"){
+        return res.status(400).send("Specialization field access denied");
+    }
+    if(body.AccountType==="Doctor" && !body.Specialization){
+        return res.status(400).send("Specialization field not specified");
+    }
+    
     bcrypt.genSalt(saltRounds, (saltErr, salt) => {
         if (saltErr) {
             res.status(500).send("Couldn't generate salt");
@@ -112,7 +119,6 @@ async function handleUserLogin(req, res) {
         res.status(500).send("Internal server error");
     }
 };
-
 
 //Returning Doctors
 
@@ -179,6 +185,9 @@ function get_html_message(Docname, DOCID, date) {
 
 async function CreateAppointment(req, res) {
     const docid = req.query._id;
+    if(!docid){
+        res.send("Doctor ID not correctly specified");
+    }
     console.log("docid:", docid);
     const body = req.body;
     const date = body.AppointmentDate;
@@ -195,8 +204,6 @@ async function CreateAppointment(req, res) {
             DoctorID: docid,
             AppointmentDate: date,
             Status: "Scheduled",
-
-
         });
 
         send_mail(docname, docid, date, Email);
@@ -216,6 +223,7 @@ async function DeleteDoctor(req, res) {
     const Email = req.query.Email;
     console.log("Email:", Email);
     const dr = await User.findOne({ "Email": Email });
+    console.log("dr:",dr);
     if (!dr) {
         res.send("User does NOT exist");
         return;
@@ -226,9 +234,7 @@ async function DeleteDoctor(req, res) {
 
     if (AccountType === "Patient" || AccountType === "Admin") {
         res.send("Cannot delete other than doctor");
-
         return;
-
     }
     else {
         const deletedoc = await User.findOneAndDelete({ Email: Email });
@@ -236,8 +242,6 @@ async function DeleteDoctor(req, res) {
         console.log("Doctor successfully deleted");
         res.send("Doctor deleted successfully");
         return;
-
-
     };
 }
 
@@ -249,6 +253,9 @@ async function AppointmentCompleted(req, res) {
         console.log("body:", Body);
         const _id = req.query._id;
         console.log("_id:", _id);
+        if(!_id){
+            res.send("Appointment ID not specified correctly");
+        }
         const complete_app = await Appointment.findOneAndUpdate({ _id: _id }, Body, { new: true });
         if (!complete_app) {
             throw new Error("Product not found!");
@@ -265,21 +272,20 @@ async function AppointmentCompleted(req, res) {
 
 async function scheduledAppointments(req, res) {
 
-
     try {
         const Email = req.query.Email;
         const user = await User.findOne({ Email: Email });
+        if(user.AccountType!=="Patient"){
+            res.send("Only patients allowed");
+        }
         const id = user._id;
         const appointments = await Appointment.find({ PatientID: id, Status: "Scheduled" });
 
-
         const variables = {
-
             "appointments": appointments
         }
         res.render("appointments", variables);
     }
-
     catch (error) {
         console.error("Error:", error);
         res.status(500).send("Server Error");
@@ -317,7 +323,6 @@ function send_mail_password(Email, token) {
             console.log("Success:", result);
         }
 
-
         transport.close();
     });
 }
@@ -343,7 +348,7 @@ async function passwordReset(req, res) {
     console.log("user:", user);
     if (!user)
         return res.render("login", {
-            error: "Invalid Email or Password"
+            error: "Invalid Email"
         });
     const token = setUser(user);
     console.log("token:", token);
@@ -362,7 +367,7 @@ async function passwordReset_token(req, res) {
 
     const body = req.body;
     const Password = body.Password;
-
+    
     bcrypt.genSalt(saltRounds, (saltErr, salt) => {
         if (saltErr) {
             res.status(500).send("Couldn't generate salt");

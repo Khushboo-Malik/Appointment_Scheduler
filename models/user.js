@@ -1,13 +1,8 @@
 const mongoose=require("mongoose");
 
-
 //Schema for users
 const UserSchema=new mongoose.Schema({
-    /*_id:{
-        type:String,
-        required:true,
-        unique:true,
-    },*/
+    
     FirstName: {
         type:String,
         required:true,
@@ -18,7 +13,6 @@ const UserSchema=new mongoose.Schema({
         required:true,
         unique:false,
     },
-    
     Email: {
         type:String,
         required:true,
@@ -34,14 +28,11 @@ const UserSchema=new mongoose.Schema({
         required:true,
         unique:true,
     },
-
     AccountType: {
         type:String,
         required:false,
         enum : ['Patient','Doctor','Admin'], 
         default: 'Patient',
-        
-
 
     },
     Specialization: {
@@ -49,18 +40,9 @@ const UserSchema=new mongoose.Schema({
         required:false,
         unique:false,
     },
-    
     });
 
-    
-      
-
-
-
-
-
     const user=mongoose.model('Users',UserSchema);
-
     module.exports=user;
 
 

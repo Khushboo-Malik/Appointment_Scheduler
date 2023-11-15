@@ -1,7 +1,5 @@
 require("dotenv").config();
 
-
-
 const express = require("express");
 const { connectMongoDb } = require("./connection");
 const {handleUserSignup,handleUserLogin,ReturnDoctors,CreateAppointment,DeleteDoctor,AppointmentCompleted,scheduledAppointments,passwordReset,passwordReset_token}=require("./controllers/user");
@@ -9,33 +7,25 @@ const {checkJWTTokenP,checkJWTTokenD,checkJWTTokenA}=require("./middleware/middl
 
 const axios=require("axios");
 
-
-
 const app = express();
-const PORT = 8000;
+const PORT = process.env.PORT || 8000;
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 const cookieParser = require('cookie-parser');
 app.use(cookieParser());
 
-
-
 const path = require("path");
 const ejs = require("ejs");
 
-
 app.set("view engine", "ejs");
 app.set("views", path.resolve("./views"));
-
 
 app.get("/signup", async (req, res) => {
     
   const variables=
   {"sitekey":process.env.SITE_KEY,}
-  
-
-  
+   
   return res.render("signup",variables);
 });
 app.post("/signup",handleUserSignup);
@@ -66,13 +56,8 @@ app.post("/password/reset",passwordReset);
 
 app.post("/password/reset/:token",passwordReset_token);
 
-
-
-
-
-connectMongoDb("mongodb://127.0.0.1:27017/appointments")
+connectMongoDb(process.env.MONGO_URL)
   .then(() => console.log("MongoDB Connected!"));
-
 
 app.listen(PORT, () => console.log("Server Started!"));
 

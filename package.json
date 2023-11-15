@@ -2,9 +2,13 @@
   "name": "appointment_scheduler",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "app.js",
   "scripts": {
-    "start": "index.js"
+    "start": "node app.js",
+    "dev":"nodemon app.js"
+  },
+  "engines": {
+    "node": "18.18.0"
   },
   "author": "",
   "license": "ISC",

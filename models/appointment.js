@@ -6,37 +6,25 @@ const mongoose=require("mongoose");
 
 const AppointmentSchema=new mongoose.Schema({
 
-    /*_id:{
-        type:String,
-        required:true,
-        unique:true,
-    },*/
     PatientID: {
         type:String,
         required:true,
         unique:false,
-
     },
     DoctorID: {
         type:String,
         required:true,
         unique:false,
-
     },
     AppointmentDate: {
         type:String,
         required:true,
         unique:false,
-
     },
     Status: {
         type:String,
         enum:['Scheduled','Completed'],
         default:'Scheduled',
-
-        
-        
-
     },
 });
 
