@@ -1,0 +1,7 @@
+DEPLOYMENT URL:
+
+https://appointment-scheduler-khushboo-malik.onrender.com/
+
+POSTMAN DOCUMENTATION URL:
+
+https://documenter.getpostman.com/view/30506930/2s9YXiYgDS
