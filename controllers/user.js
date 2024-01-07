@@ -249,18 +249,19 @@ async function DeleteDoctor(req, res) {
 
 async function AppointmentCompleted(req, res) {
     try {
-        const Body = req.body;
-        console.log("body:", Body);
+        
         const _id = req.query._id;
-        console.log("_id:", _id);
+        
         if(!_id){
-            res.send("Appointment ID not specified correctly");
+            res.send("Appointment ID not specified");
         }
-        const complete_app = await Appointment.findOneAndUpdate({ _id: _id }, Body, { new: true });
+        const complete_app=await Appointment.findOne({"_id":_id});
         if (!complete_app) {
             throw new Error("Product not found!");
         }
         else {
+            complete_app.Status="Completed";
+            await complete_app.save();
             res.json(complete_app);
         }
     } catch (error) {
@@ -344,6 +345,7 @@ async function passwordReset(req, res) {
         res.error(400).send("Email not provided");
         return;
     }
+    
     const user = await User.findOne({ Email });
     console.log("user:", user);
     if (!user)
@@ -362,7 +364,6 @@ async function passwordReset(req, res) {
 async function passwordReset_token(req, res) {
     const token = req.params.token;
     const decoded_token = getUser(token);
-
     const Email = decoded_token.Email;
 
     const body = req.body;
