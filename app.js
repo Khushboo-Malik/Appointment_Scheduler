@@ -127,7 +127,7 @@ const Image = mongoose.model('Image', imgSchema);
             console.log(err);
             res.status(500).json({ error: 'Internal Server Error' });
         });
-});
+});*/
 
 app.get('/image/showImg', (req, res) => {
     Image.find({})
@@ -138,7 +138,7 @@ app.get('/image/showImg', (req, res) => {
             console.log(err);
             res.status(500).json({ error: 'Internal Server Error' });
         });
-});*/
+});
 
 app.post('/image/uploadImg', upload.single('img'), (req, res, next) => {
   const { name, desc } = req.body;
@@ -169,7 +169,7 @@ app.post('/image/uploadImg', upload.single('img'), (req, res, next) => {
       });
 });
 
-// GET route for fetching all images
+/* GET route for fetching all images
 app.get('/image/showImg', (req, res) => {
   Image.find({})
       .then((data) => {
@@ -179,7 +179,7 @@ app.get('/image/showImg', (req, res) => {
           console.error(err);
           res.status(500).json({ error: 'Internal Server Error' });
       });
-});
+});*/
 
 
 connectMongoDb(process.env.MONGO_URL)
