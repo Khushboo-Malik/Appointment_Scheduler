@@ -89,57 +89,15 @@ const imgSchema = new mongoose.Schema({
   name: String,
   desc: String,
   img: {
-      data: Buffer,
+      data: {
+          type: Buffer,
+          required: true,
+      },
       contentType: String,
   },
 });
 
 const Image = mongoose.model('Image', imgSchema);
-
-//const fs = require('fs');
-
-/*app.post('/image/uploadImg', upload.single('img'), (req, res, next) => {
-    const { name, desc } = req.body;
-
-    if (!name || !desc || !req.file) {
-        return res.status(400).json({ error: 'Name, description, and image are required.' });
-    }
-
-    const imgData = fs.readFileSync(path.join(__dirname, 'uploads', req.file.filename));
-
-    const obj = {
-        name,
-        desc,
-        img: {
-            data: imgData,
-            contentType: req.file.mimetype,
-        },
-    };
-
-    Image.create(obj)
-        .then((item) => {
-            res.status(201).json({
-                success: true,
-                message: 'File successfully uploaded.',
-            });
-        })
-        .catch((err) => {
-            console.log(err);
-            res.status(500).json({ error: 'Internal Server Error' });
-        });
-});*/
-
-app.get('/image/showImg', (req, res) => {
-    Image.find({})
-        .then((data) => {
-            res.json({ items: data });
-        })
-        .catch((err) => {
-            console.log(err);
-            res.status(500).json({ error: 'Internal Server Error' });
-        });
-});
-
 app.post('/image/uploadImg', upload.single('img'), (req, res, next) => {
   const { name, desc } = req.body;
 
@@ -151,10 +109,12 @@ app.post('/image/uploadImg', upload.single('img'), (req, res, next) => {
       name,
       desc,
       img: {
-          data: req.file.buffer, // Use req.file.buffer directly
+          data: fs.readFileSync(req.file.path),
           contentType: req.file.mimetype,
       },
   };
+  console.log("req.body", req.body)
+  console.log("req.file", obj.img.data) 
 
   Image.create(obj)
       .then((item) => {
@@ -169,18 +129,26 @@ app.post('/image/uploadImg', upload.single('img'), (req, res, next) => {
       });
 });
 
-/* GET route for fetching all images
 app.get('/image/showImg', (req, res) => {
   Image.find({})
       .then((data) => {
-          res.json({ items: data });
+          // Map the data to include the data field in the response
+          const items = data.map(item => ({
+              name: item.name,
+              desc: item.desc,
+              img: {
+                  data:item.img.data.toString('base64'), // Convert Buffer to base64
+                  contentType: item.img.contentType,
+              },
+          }));
+
+          res.json({ items });
       })
       .catch((err) => {
-          console.error(err);
+          console.log(err);
           res.status(500).json({ error: 'Internal Server Error' });
       });
-});*/
-
+});
 
 connectMongoDb(process.env.MONGO_URL)
   .then(() => console.log("MongoDB Connected!"));
