@@ -1,4 +1,11 @@
 node_modules/
 .env
-uploads/*
-
+/controllers/uploads/
+/controllers2/
+/middleware2/
+/models2/
+/views2/
+app2.js
+config2.js
+connection2.js
+/uploads/
