@@ -116,7 +116,7 @@ async function enterField(req,res){
         if(!user){
             return res.status(400).json("Kindly enter previous details first");
         }
-        if(user.emailVerified!=='Yes'){
+        if(!user.emailVerified==='Yes'){
             return res.status(400).json("Please verify your email first");
         }
         const body=req.body;
@@ -272,7 +272,7 @@ async function newPassword(req,res){
             return res.status(400).json({ error: 'Please confirm your password' });
         }
 
-        if(newPassword!==confirmPassword){
+        if(!newPassword===confirmPassword){
             return res.status(400).json({error:"New Password and Confirm Password should match"});
         }
 
