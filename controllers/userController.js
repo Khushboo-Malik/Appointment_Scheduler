@@ -44,6 +44,7 @@ async function handleUserSignup(req, res) {
     if(result){
         return res.json("Email already exists");
     };
+    const result2=await User.findOne({"mobile_number":user.mobile_number});
 
     if(!user.password){
         return res.status(400).json("Please enter password");
